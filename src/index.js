@@ -86,26 +86,36 @@ const Menu = () => {
   );
 };
 
-const Pizza = (props) => {
-  console.log(props);
+const Pizza = ({ pizzaObj }) => {
+  // console.log(props);
+  console.log(pizzaObj);
 
-  if (props.pizzaObj.soldOut) return null;
+  // if (pizzaObj.soldOut) return null;
 
   return (
-    <ul className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+    <ul className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>${props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
       </div>
     </ul>
   );
 };
 
+const Order = ({ closeHour, openHour }) => {
+  return (
+    <div className="order">
+      <p>we are open until {closeHour}:00. Come visit us or order online</p>
+      <button className="btn">order</button>
+    </div>
+  );
+};
+
 const Footer = () => {
   const hour = new Date().getHours();
-  const openHour = 18;
+  const openHour = 10;
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
@@ -126,10 +136,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       {isOpen ? (
-        <div className="order">
-          <p>we are open until {closeHour}:00. Come visit us or order online</p>
-          <button className="btn">order</button>
-        </div>
+        <Order closeHour={closeHour} openHour={openHour} />
       ) : (
         <p style={{ color: "red", fontStyle: "italic" }}>
           We are happy to welcome you between {openHour}:00 and {closeHour}
