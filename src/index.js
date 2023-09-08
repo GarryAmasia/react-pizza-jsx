@@ -57,16 +57,6 @@ const App = () => {
   );
 };
 
-const Pizza = () => {
-  return (
-    <div>
-      <img src="../pizzas/spinaci.jpg" alt="spinaci" />
-      <h3>Pizza Spinaci</h3>
-      <p>"Tomato, mozarella, spinach, and ricotta cheese"</p>
-    </div>
-  );
-};
-
 const Header = () => {
   // const style = { color: "red", fontSize: "48px", textTransform: "uppercase" };
   const style = {};
@@ -78,19 +68,44 @@ const Header = () => {
 };
 
 const Menu = () => {
+  const pizzas = pizzaData;
+  // const pizzas = [];
+  const numPizzas = pizzas.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+
+      {numPizzas > 0 && (
+        <ul className="pizzas">
+          {pizzas.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      )}
     </main>
+  );
+};
+
+const Pizza = (props) => {
+  console.log(props);
+
+  if (props.pizzaObj.soldOut) return null;
+
+  return (
+    <ul className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <div>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>${props.pizzaObj.price}</span>
+      </div>
+    </ul>
   );
 };
 
 const Footer = () => {
   const hour = new Date().getHours();
-  const openHour = 8;
+  const openHour = 18;
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
@@ -100,9 +115,27 @@ const Footer = () => {
   // } else {
   //   alert("we are closed");
   // }
+
+  // if (!isOpen)
+  //   return (
+  //     <h2>
+  //       We are happy to welcome you between {openHour}:00 and {closeHour}:00
+  //     </h2>
+  //   );
+
   return (
     <footer className="footer">
-      {new Date().toLocaleString()}. We are currently Open!!!
+      {isOpen ? (
+        <div className="order">
+          <p>we are open until {closeHour}:00. Come visit us or order online</p>
+          <button className="btn">order</button>
+        </div>
+      ) : (
+        <p style={{ color: "red", fontStyle: "italic" }}>
+          We are happy to welcome you between {openHour}:00 and {closeHour}
+          :00.
+        </p>
+      )}
     </footer>
   );
   //this code below is bad way!!!
